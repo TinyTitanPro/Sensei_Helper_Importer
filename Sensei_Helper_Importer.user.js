@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Sensei Helper Importer
-// @version      0.1
+// @version      0.2
 // @description  Sensei Helper素材需求导入
 // @author       Tiny
 // @match        https://sensei.help/zh
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=sensei.help
-// @namespace    senseihelperimporter
+// @namespace    https://github.com/TinyTitanPro/Sensei_Helper_Importer/blob/main/Sensei_Helper_Importer.user.js
 // @license      MIT
 // @grant        none
 // ==/UserScript==
