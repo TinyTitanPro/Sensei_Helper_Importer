@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Sensei Helper Importer
-// @version      0.2
+// @version      0.3
 // @description  Sensei Helper素材需求导入
 // @author       Tiny
 // @match        https://sensei.help/zh
