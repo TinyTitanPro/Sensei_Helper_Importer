@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Sensei Helper Importer
-// @version      0.4
+// @version      0.5
 // @description  Sensei Helper素材需求导入
 // @author       Tiny
 // @match        https://sensei.help/zh*
@@ -22,11 +22,14 @@
     let front = "{\"equipmentsRequirementStore\":{\"requirementByPieces\":[";
     let end = "],\"requirementMode\":\"ByPiece\"},\"gameInfoStore\":{\"gameServer\":\"Global\"}}";
 
-    let urlcheck = getUrlParam('json');
+    let urlcheck = getUrlParam('code');
 
     if (!!urlcheck){
-        let importcode = front+urlcheck+end;
-        window.localStorage.setItem("SenseiHelperStore",importcode);
+        let tempcode = urlcheck.replace(/,/g,'","count":');
+        let tempcode2 = tempcode.replace(/;/g,'}, {"pieceId":"21');
+        let initialcode = front+'{"pieceId":"21'+tempcode2+'}'+end;
+        alert('导入完成');
+        window.localStorage.setItem("SenseiHelperStore",initialcode);
     }
 
     importbox.placeholder = '在此粘贴导入代码';
