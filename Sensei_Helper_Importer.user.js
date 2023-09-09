@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Sensei Helper Importer
-// @version      0.5
+// @version      0.6
 // @description  Sensei Helper素材需求导入
 // @author       Tiny
 // @match        https://sensei.help/zh*
@@ -28,8 +28,9 @@
         let tempcode = urlcheck.replace(/,/g,'","count":');
         let tempcode2 = tempcode.replace(/;/g,'}, {"pieceId":"21');
         let initialcode = front+'{"pieceId":"21'+tempcode2+'}'+end;
-        alert('导入完成');
         window.localStorage.setItem("SenseiHelperStore",initialcode);
+        alert('导入完成');
+        window.location.href="https://sensei.help/zh";
     }
 
     importbox.placeholder = '在此粘贴导入代码';
