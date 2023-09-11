@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Sensei Helper Importer
-// @version      0.6
+// @version      0.7
 // @description  Sensei Helper素材需求导入
 // @author       Tiny
 // @match        https://sensei.help/zh*
@@ -13,28 +13,41 @@
 (function() {
     'use strict';
 
-    let importbox = document.createElement('input');
-    let importbtn = document.createElement('button');
-    let btntext = document.createElement('div');
-    let btnclick = document.createElement('span');
 
+    //初始化命令相关字符串
+    var front = "{\"equipmentsRequirementStore\":{\"requirementByPieces\":[";
+    var end1 = "],\"requirementMode\":\"ByPiece\"},\"gameInfoStore\":{\"gameServer\":\"";
+    var end2 = "\"}}";
+    var server = "Global";
 
-    let front = "{\"equipmentsRequirementStore\":{\"requirementByPieces\":[";
-    let end = "],\"requirementMode\":\"ByPiece\"},\"gameInfoStore\":{\"gameServer\":\"Global\"}}";
+    //从url中获取相关参数
+    var codecheck = getUrlParam('code');
+    var servercheck = getUrlParam('server');
 
-    let urlcheck = getUrlParam('code');
-
-    if (!!urlcheck){
-        let tempcode = urlcheck.replace(/,/g,'","count":');
-        let tempcode2 = tempcode.replace(/;/g,'}, {"pieceId":"21');
-        let initialcode = front+'{"pieceId":"21'+tempcode2+'}'+end;
+    //如果参数存在，则自动执行导入
+    if (!!codecheck){
+        if (!!servercheck){
+            server = servercheck.trim();
+        }
+        var tempcode = codecheck.replace(/,/g,'","count":');
+        var tempcode2 = tempcode.replace(/;/g,'}, {"pieceId":"21');
+        var initialcode = front+'{"pieceId":"21'+tempcode2+'}'+end1+server+end2;
         window.localStorage.setItem("SenseiHelperStore",initialcode);
         alert('导入完成');
         window.location.href="https://sensei.help/zh";
     }
 
+
+    //创建元素
+    var importbox = document.createElement('input');
+    var importbtn = document.createElement('button');
+    var btntext = document.createElement('div');
+    var btnclick = document.createElement('span');
+
+    //设置元素样式
     importbox.placeholder = '在此粘贴导入代码';
     btntext.innerText = '导入素材需求';
+    //importbtn.textContent = '导入素材需求';
 
     importbtn.className = 'css-a89121';
     importbox.style.position = 'relative';
@@ -49,21 +62,28 @@
     btntext.className = ' revert-wiz-transform';
     btnclick.className = 'MuiTouchRipple-root css-w0pj6f';
 
-
-    //importbtn.textContent = '导入素材需求';
+    //点击按钮时执行导入
     importbtn.addEventListener('click',() => {
-        let importcode = front+importbox.value+end;
+        var jsoncode = importbox.value.split("&")[0];
+        var servercode = importbox.value.split("&")[1];
+        if (!!servercode){
+            server = servercode.trim();
+        }
+        var importcode = front+jsoncode+end1+server+end2;
         window.localStorage.setItem("SenseiHelperStore",importcode);
         alert("导入完成，即将刷新页面");
         //alert(importcode);
         location.reload();
     });
 
+    //在页面中插入元素
     document.querySelector("#__next > div.MuiGrid2-root.MuiGrid2-container.MuiGrid2-direction-xs-row.css-6mqsus > div > div > div > div > div:nth-child(1) > div.BuiLinedText_textRowContainer__gFUcJ").appendChild(importbox);
     document.querySelector("#__next > div.MuiGrid2-root.MuiGrid2-container.MuiGrid2-direction-xs-row.css-6mqsus > div > div > div > div > div:nth-child(1) > div.BuiLinedText_textRowContainer__gFUcJ").appendChild(importbtn);
     importbtn.appendChild(btntext);
     importbtn.appendChild(btnclick);
 
+
+    //从url中获取参数的函数
     function getUrlParam(name) {
     //构造一个含有目标参数的正则表达式对象
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
